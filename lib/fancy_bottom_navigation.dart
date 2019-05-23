@@ -25,7 +25,7 @@ class FancyBottomNavigation extends StatefulWidget {
       this.barBackgroundColor})
       : assert(onTabChangedListener != null),
         assert(tabs != null),
-        assert(tabs.length > 1 && tabs.length < 5);
+        assert(tabs.length > 1 && tabs.length < 6);
 
   final Function(int position) onTabChangedListener;
   final Color circleColor;
@@ -143,80 +143,82 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
                 .toList(),
           ),
         ),
-        Positioned.fill(
-          top: -(CIRCLE_SIZE + CIRCLE_OUTLINE + SHADOW_ALLOWANCE) / 2,
-          child: Container(
-            child: AnimatedAlign(
-              duration: Duration(milliseconds: ANIM_DURATION),
-              curve: Curves.easeOut,
-              alignment: Alignment(_circleAlignX, 1),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 15),
-                child: FractionallySizedBox(
-                  widthFactor: 1 / widget.tabs.length,
-                  child: GestureDetector(
-                    onTap: widget.tabs[currentSelected].onclick,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        SizedBox(
-                          height:
-                              CIRCLE_SIZE + CIRCLE_OUTLINE + SHADOW_ALLOWANCE,
-                          width:
-                              CIRCLE_SIZE + CIRCLE_OUTLINE + SHADOW_ALLOWANCE,
-                          child: ClipRect(
-                              clipper: HalfClipper(),
-                              child: Container(
-                                child: Center(
-                                  child: Container(
-                                      width: CIRCLE_SIZE + CIRCLE_OUTLINE,
-                                      height: CIRCLE_SIZE + CIRCLE_OUTLINE,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.black12,
-                                                blurRadius: 8)
-                                          ])),
-                                ),
-                              )),
-                        ),
-                        SizedBox(
-                            height: ARC_HEIGHT,
-                            width: ARC_WIDTH,
-                            child: CustomPaint(
-                              painter: HalfPainter(barBackgroundColor),
-                            )),
-                        SizedBox(
-                          height: CIRCLE_SIZE,
-                          width: CIRCLE_SIZE,
+        _buildArc(context)
+      ],
+    );
+  }
+
+  Widget _buildArc(BuildContext context) {
+    return Positioned.fill(
+      top: -(CIRCLE_SIZE + CIRCLE_OUTLINE + SHADOW_ALLOWANCE) / 2,
+      child: Container(
+        child: AnimatedAlign(
+          duration: Duration(milliseconds: ANIM_DURATION),
+          curve: Curves.easeOut,
+          alignment: Alignment(_circleAlignX, 1),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 0),
+            child: FractionallySizedBox(
+              widthFactor: 1 / widget.tabs.length,
+              child: GestureDetector(
+                onTap: widget.tabs[currentSelected].onclick,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: CIRCLE_SIZE + CIRCLE_OUTLINE + SHADOW_ALLOWANCE,
+                      width: CIRCLE_SIZE + CIRCLE_OUTLINE + SHADOW_ALLOWANCE,
+                      child: ClipRect(
+                          clipper: HalfClipper(15),
                           child: Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: circleColor),
-                            child: Padding(
-                              padding: const EdgeInsets.all(0.0),
-                              child: AnimatedOpacity(
-                                duration:
-                                    Duration(milliseconds: ANIM_DURATION ~/ 5),
-                                opacity: _circleIconAlpha,
-                                child: Icon(
-                                  activeIcon,
-                                  color: activeIconColor,
-                                ),
-                              ),
+                            child: Center(
+                              child: Container(
+                                  width: CIRCLE_SIZE + CIRCLE_OUTLINE,
+                                  height: CIRCLE_SIZE + CIRCLE_OUTLINE,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black12,
+                                            blurRadius: 8)
+                                      ])),
+                            ),
+                          )),
+                    ),
+                    SizedBox(
+                        height: ARC_HEIGHT,
+                        width: ARC_WIDTH,
+                        child: CustomPaint(
+                          painter: HalfPainter(barBackgroundColor),
+                        )),
+                    SizedBox(
+                      height: CIRCLE_SIZE,
+                      width: CIRCLE_SIZE,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: circleColor),
+                        child: Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child: AnimatedOpacity(
+                            duration:
+                                Duration(milliseconds: ANIM_DURATION ~/ 5),
+                            opacity: _circleIconAlpha,
+                            child: Icon(
+                              activeIcon,
+                              color: activeIconColor,
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 
